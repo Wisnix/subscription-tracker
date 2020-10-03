@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,8 +53,8 @@ public class UserController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> signUp(@RequestBody User user) {
-		if(userService.loadUserByUsername(user.getUsername())!=null) {
-			throw new UserAlreadyExistsException("User with username "+user.getUsername()+" already exists.");
+		if(userService.findByEmail(user.getEmail())!=null) {
+			throw new UserAlreadyExistsException("User with Email "+user.getEmail()+" already exists.");
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userService.createUser(user);
@@ -64,11 +65,11 @@ public class UserController {
 	public ResponseEntity<AuthenticationResponse> generateToken(@RequestBody AuthenticationRequest request) throws Exception {
 		try {
 			authenticationManager
-			.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+			.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 		}catch(BadCredentialsException e) {
-			throw new Exception("Invalid username/password",e);
+			throw new Exception("Invalid Email/password",e);
 		}
-		final UserDetails userDetails=userService.loadUserByUsername(request.getUsername());
+		final UserDetails userDetails=userService.loadUserByUsername(request.getEmail());
 		AuthenticationResponse authRes=new AuthenticationResponse(jwt.generateToken(userDetails),jwt.getExpirationDate());
 		return new ResponseEntity<>(authRes,HttpStatus.OK);
 	}

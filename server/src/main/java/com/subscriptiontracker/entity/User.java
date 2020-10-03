@@ -17,7 +17,7 @@ public class User{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	private String username;
+	private String email;
 	private String password;
 	@OneToMany( cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
@@ -26,10 +26,10 @@ public class User{
 	public User() {
 		super();
 	}
-	public User(Integer id, String username, String password, List<Subscription> subscriptions) {
+	public User(Integer id, String email, String password, List<Subscription> subscriptions) {
 		super();
 		this.id = id;
-		this.username = username;
+		this.email = email;
 		this.password = password;
 		this.subscriptions = subscriptions;
 	}
@@ -39,11 +39,11 @@ public class User{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public String getPassword() {
 		return password;

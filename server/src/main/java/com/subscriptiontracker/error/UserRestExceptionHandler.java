@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class UserRestExceptionHandler {
 
-	
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(UserAlreadyExistsException exception) {
 		ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(),

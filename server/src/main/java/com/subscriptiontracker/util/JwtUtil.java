@@ -22,8 +22,9 @@ public class JwtUtil {
 	@Value("${jwt.expiration-time}")
 	private long expirationTime;
 	
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(UserDetails userDetails,int userId) {
 		Map<String,Object> claims=new HashMap<>();
+		claims.put("userId", userId);
 		return createToken(claims, userDetails.getUsername());
 	}
 
@@ -57,6 +58,10 @@ public class JwtUtil {
 
 	public String extractUsername(String token) {
 		 return extractClaim(token, Claims::getSubject);
+	}
+	
+	public Integer extractUserId(String token) {
+		 return (Integer) extractClaim(token, c->c.get("userId"));
 	}
 
 	public Date getExpirationDate() {

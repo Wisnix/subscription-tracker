@@ -41,8 +41,8 @@ class SubscriptionControllerTest {
 
 	@Test
 	void testCreateSubscriptionBasic() throws Exception {
-		Subscription subscription = new Subscription(1, 1, LocalDate.of(2022, 3, 19), 7, "Netflix subscription",
-				"active", 14);
+		Subscription subscription = new Subscription(1, 1, LocalDate.of(2022, 3, 19), "weekly", "Netflix subscription",
+				"active", 14,10.0f);
 		String subscriptionJSON = mapper.writeValueAsString(subscription);
 
 		when(subscriptionService.save(subscription)).thenReturn(subscription);
@@ -60,8 +60,8 @@ class SubscriptionControllerTest {
 
 	@Test
 	void testCreateSubscriptionNullFields() throws Exception {
-		Subscription subscription = new Subscription(null, 1, null, null, null, null, null);
-		Subscription returnedSubscription = new Subscription(1, 1, null, null, null, null, null);
+		Subscription subscription = new Subscription(null, 1, null, null, null, null, null,null);
+		Subscription returnedSubscription = new Subscription(1, 1, null, null, null, null, null,null);
 		when(subscriptionService.save(subscription)).thenReturn(returnedSubscription);
 
 		String subscriptionJSON = mapper.writeValueAsString(subscription);
@@ -112,10 +112,10 @@ class SubscriptionControllerTest {
 	@Test
 	void testUpdateSubscriptionbasic() throws Exception {
 		int subscriptionId=1;
-		Subscription subscription = new Subscription(1, 1, LocalDate.of(2022, 3, 19), 7, "Netflix subscription",
-				"active", 14);
-		Subscription newSubscription = new Subscription(1, 1, LocalDate.of(2022, 3, 20), 14, "Spotify subscription",
-				"active", 30);
+		Subscription subscription = new Subscription(1, 1, LocalDate.of(2022, 3, 19), "weekly", "Netflix subscription",
+				"active", 14,9.99f);
+		Subscription newSubscription = new Subscription(1, 1, LocalDate.of(2022, 3, 20), "monthly", "Spotify subscription",
+				"active", 30,199.99f);
 		String subscriptionJSON = mapper.writeValueAsString(newSubscription);
 
 		when(subscriptionService.findById(subscriptionId)).thenReturn(subscription);
@@ -135,10 +135,10 @@ class SubscriptionControllerTest {
 	@Test
 	void testUpdateSubscriptionWrongId() throws Exception {
 		int subscriptionId=2;
-		Subscription subscription = new Subscription(1, 1, LocalDate.of(2022, 3, 19), 7, "Netflix subscription",
-				"active", 14);
-		Subscription newSubscription = new Subscription(1, 1, LocalDate.of(2022, 3, 20), 14, "Spotify subscription",
-				"active", 30);
+		Subscription subscription = new Subscription(1, 1, LocalDate.of(2022, 3, 19), "weekly", "Netflix subscription",
+				"active", 14,25.99f);
+		Subscription newSubscription = new Subscription(1, 1, LocalDate.of(2022, 3, 20), "weekly", "Spotify subscription",
+				"active", 30,30f);
 		String subscriptionJSON = mapper.writeValueAsString(newSubscription);
 
 		when(subscriptionService.findById(2)).thenReturn(null);

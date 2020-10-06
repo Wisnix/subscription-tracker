@@ -1,0 +1,6 @@
+.sidebar-sticky {
+  font-size: 1.2rem;
+  background-color: #e4e8ec;
+  height: calc(100vh - 59px);
+  padding: 0px 20px;
+}

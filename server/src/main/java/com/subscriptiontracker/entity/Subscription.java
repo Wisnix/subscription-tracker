@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -28,15 +30,16 @@ public class Subscription {
 	@JsonSerialize(using = LocalDateSerializer.class)
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate startDate;
-	private Integer payInterval;
+	private String payInterval;
 	private String name;
 	private String status;
 	private Integer freePeriod;
+	private Float price;
 	
 	public Subscription() {
 		super();
 	}
-	public Subscription(Integer id, Integer userId, LocalDate startDate, Integer payInterval, String name, String status,Integer freePeriod) {
+	public Subscription(Integer id, Integer userId, LocalDate startDate, String payInterval, String name, String status,Integer freePeriod,  Float price) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -45,6 +48,7 @@ public class Subscription {
 		this.name = name;
 		this.status = status;
 		this.freePeriod=freePeriod;
+		this.price=price;
 	}
 	
 	public Integer getFreePeriod() {
@@ -71,10 +75,10 @@ public class Subscription {
 	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
-	public Integer getPayInterval() {
+	public String getPayInterval() {
 		return payInterval;
 	}
-	public void setPayInterval(Integer payInterval) {
+	public void setPayInterval(String payInterval) {
 		this.payInterval = payInterval;
 	}
 	public String getName() {
@@ -89,7 +93,12 @@ public class Subscription {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+	public Float getPrice() {
+		return price;
+	}
+	public void setPrice(Float price) {
+		this.price = price;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -98,6 +107,7 @@ public class Subscription {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((payInterval == null) ? 0 : payInterval.hashCode());
+		result = prime * result + ((price == null) ? 0 : price.hashCode());
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
@@ -132,6 +142,11 @@ public class Subscription {
 				return false;
 		} else if (!payInterval.equals(other.payInterval))
 			return false;
+		if (price == null) {
+			if (other.price != null)
+				return false;
+		} else if (!price.equals(other.price))
+			return false;
 		if (startDate == null) {
 			if (other.startDate != null)
 				return false;
@@ -151,8 +166,11 @@ public class Subscription {
 	}
 	@Override
 	public String toString() {
-		return "Subscription [id=" + id + ", startDate=" + startDate + ", payInterval=" + payInterval + ", name=" + name
-				+ ", status=" + status + ", freePeriod=" + freePeriod + "]";
+		return "Subscription [id=" + id + ", userId=" + userId + ", startDate=" + startDate + ", payInterval="
+				+ payInterval + ", name=" + name + ", status=" + status + ", freePeriod=" + freePeriod + ", price="
+				+ price + "]";
 	}
+	
+	
 	
 }

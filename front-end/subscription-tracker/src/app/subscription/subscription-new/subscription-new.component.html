@@ -1,0 +1,84 @@
+<div class="container">
+    <form [formGroup]="subscriptionForm" (ngSubmit)="onCreateSubscription()">
+        <div class="form-group">
+            <label for="name">Subscription Name</label>
+            <input type="text" class="form-control" id="name" aria-describedby="name"
+                [ngClass]="{'is-valid':name.valid,'is-invalid':name.invalid && name.touched}" formControlName="name">
+            <div class="invalid-feedback" *ngIf="name.invalid && name.touched">
+                Please provide a name.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button" (click)="onSetToday()">Today</button>
+                </div>
+                <input type="date" class="form-control" id="startDate"
+                    [ngClass]="{'is-valid':startDate.valid,'is-invalid':startDate.invalid && startDate.touched}"
+                    formControlName="startDate">
+            </div>
+            <div class="invalid-feedback" *ngIf="startDate.invalid && startDate.touched">
+                Please enter a start date.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="price">Pirce</label>
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">£</div>
+                </div>
+                <input type="number" class="form-control" id="inlineFormInputGroup"
+                    [ngClass]="{'is-valid':price.valid,'is-invalid':price.invalid && price.touched}"
+                    formControlName="price">
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Subscription type:</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payInterval" id="typeAnnual" value="annual"
+                    formControlName="payInterval">
+                <label class="form-check-label" for="typeAnnual">
+                    Annual
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payInterval" id="typeMonthly" value="monthly"
+                    formControlName="payInterval">
+                <label class="form-check-label" for="typeMonthly">
+                    Monthly
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payInterval" id="typeWeekly" value="weekly"
+                    formControlName="payInterval">
+                <label class="form-check-label" for="typeWeekly">
+                    Weekly
+                </label>
+            </div>
+            <div class="text-danger mt-2" *ngIf="submitted && payInterval.invalid">
+                Please choose type.
+            </div>
+
+        </div>
+        <div class=" form-group form-check">
+            <input type="checkbox" class="form-check-input" id="freePeriod" (change)="freePeriod=!freePeriod">
+            <label class="form-check-label" for="freePeriod">Free period</label>
+        </div>
+        <div class="form-group" *ngIf="freePeriod">
+            <label for="freePeriodDuration">Duration in days</label>
+            <input type="number" class="form-control" id="freePeriodDuration" formControlName="freePeriod">
+        </div>
+        <div class="form-group form-check" *ngIf="freePeriod">
+            <input type="checkbox" class="form-check-input" id="reminder" formControlName="reminder" [checked]="false">
+            <label class="form-check-label" for="reminder">Receive reminder SMS and Email a day before free period
+                expires</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="text-danger mt-2" *ngIf="submitted && subscriptionForm.invalid">
+            Please fill the form.
+        </div>
+    </form>
+</div>

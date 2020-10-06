@@ -1,5 +1,6 @@
 package com.subscriptiontracker.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	private JwtUtil jwt;
+	private JwtUtil jwtUtil;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -69,8 +70,9 @@ public class UserController {
 		}catch(BadCredentialsException e) {
 			throw new Exception("Invalid Email/password",e);
 		}
-		final UserDetails userDetails=userService.loadUserByUsername(request.getEmail());
-		AuthenticationResponse authRes=new AuthenticationResponse(jwt.generateToken(userDetails),jwt.getExpirationDate());
+		User user=userService.findByEmail(request.getEmail());
+		final UserDetails userDetails=new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),new ArrayList<>());
+		AuthenticationResponse authRes=new AuthenticationResponse(jwtUtil.generateToken(userDetails,user.getId()),jwtUtil.getExpirationDate());
 		return new ResponseEntity<>(authRes,HttpStatus.OK);
 	}
 

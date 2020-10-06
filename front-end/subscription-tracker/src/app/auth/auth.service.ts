@@ -57,14 +57,19 @@ export class AuthService {
     }, expirationTimestamp - Date.now());
   }
 
-  private logout() {
+  logout() {
     this.clearAuthData();
     this.isAuthenticated = false;
     this.token = null;
     this.expirationTimer = null;
+    this.router.navigate(['/login']);
   }
 
   isAuth(): boolean {
     return this.isAuthenticated;
+  }
+
+  getToken() {
+    return this.token;
   }
 }

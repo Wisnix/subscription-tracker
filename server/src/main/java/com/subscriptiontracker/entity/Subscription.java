@@ -35,11 +35,12 @@ public class Subscription {
 	private String status;
 	private Integer freePeriod;
 	private Float price;
+	private Boolean reminder;
 	
 	public Subscription() {
 		super();
 	}
-	public Subscription(Integer id, Integer userId, LocalDate startDate, String payInterval, String name, String status,Integer freePeriod,  Float price) {
+	public Subscription(Integer id, Integer userId, LocalDate startDate, String payInterval, String name, String status,Integer freePeriod,  Float price,Boolean reminder) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -49,6 +50,7 @@ public class Subscription {
 		this.status = status;
 		this.freePeriod=freePeriod;
 		this.price=price;
+		this.reminder=reminder;
 	}
 	
 	public Integer getFreePeriod() {
@@ -98,6 +100,12 @@ public class Subscription {
 	}
 	public void setPrice(Float price) {
 		this.price = price;
+	}
+	public Boolean getReminder() {
+		return reminder;
+	}
+	public void setReminder(Boolean reminder) {
+		this.reminder = reminder;
 	}
 	@Override
 	public int hashCode() {

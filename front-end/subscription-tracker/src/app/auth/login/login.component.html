@@ -1,6 +1,8 @@
 <p *ngIf="isAuth">asdkakoiaskdiopawdpa</p>
 <div class="login text-center card">
     <form class="form-signin" #loginForm="ngForm" (submit)="onSubmit(loginForm)">
+        <div class="alert alert-success" *ngIf="signupSuccess">Account created.</div>
+        <div class="alert alert-danger" *ngIf="loginFailure">Wrong username/password.</div>
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" name="email" ngModel #email="ngModel" email

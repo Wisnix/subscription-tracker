@@ -7,6 +7,7 @@ import { SubscriptionSelectComponent } from './subscription-select/subscription-
 const routes: Routes = [
   { path: '', component: SubscriptionListComponent },
   { path: 'new', component: SubscriptionNewComponent },
+  { path: ':id/edit', component: SubscriptionNewComponent },
   { path: ':id', component: SubscriptionSelectComponent },
 ];
 

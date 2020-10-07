@@ -1,3 +1,7 @@
 nav a {
   color: #fff;
 }
+
+.logout:hover {
+  background-color: #3429ff;
+}

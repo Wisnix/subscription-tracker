@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.subscriptiontracker.entity.AuthenticationRequest;
 import com.subscriptiontracker.entity.AuthenticationResponse;
 import com.subscriptiontracker.entity.Subscription;
@@ -45,6 +45,9 @@ public class UserController {
 	private JwtUtil jwtUtil;
 
 	@Autowired
+	private ObjectMapper mapper;
+	
+	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@GetMapping("/{id}/subscriptions")
@@ -59,7 +62,7 @@ public class UserController {
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userService.createUser(user);
-		return new ResponseEntity<>("User created.", HttpStatus.CREATED);
+		return new ResponseEntity<>(mapper.createObjectNode().put("message", "User created."), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/authenticate")
@@ -72,7 +75,7 @@ public class UserController {
 		}
 		User user=userService.findByEmail(request.getEmail());
 		final UserDetails userDetails=new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),new ArrayList<>());
-		AuthenticationResponse authRes=new AuthenticationResponse(jwtUtil.generateToken(userDetails,user.getId()),jwtUtil.getExpirationDate());
+		AuthenticationResponse authRes=new AuthenticationResponse(jwtUtil.generateToken(userDetails,user.getId()),jwtUtil.getExpirationDate(),user.getId());
 		return new ResponseEntity<>(authRes,HttpStatus.OK);
 	}
 

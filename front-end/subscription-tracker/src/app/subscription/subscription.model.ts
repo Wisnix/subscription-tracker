@@ -1,11 +1,12 @@
 export interface Subscription {
   id?: string;
-  user_id?: string;
+  userId?: string;
   startDate: Date;
   price: number;
-  pay_interval: string;
+  payInterval: string;
   name: string;
   status?: string;
-  free_period: number;
+  freePeriod: number;
   reminder: boolean;
+  nextPayment: string;
 }

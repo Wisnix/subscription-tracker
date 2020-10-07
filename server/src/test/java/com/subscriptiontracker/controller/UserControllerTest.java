@@ -46,9 +46,9 @@ public class UserControllerTest {
 	@Test
 	public void findSubscriptionsByUserIdTestBasic() throws Exception {
 		List<Subscription> subscriptionList=Arrays.asList(
-				new Subscription(1, 1, LocalDate.of(2022, 3, 19), "weekly", "Netflix subscription", "active", 14,20.0f),
-				new Subscription(2, 1, LocalDate.of(2022, 3, 19), "weekly", "Spotify subscription", "active", 14,20.0f),
-				new Subscription(3, 1, LocalDate.of(2022, 3, 19), "weekly", "Jakas tam paroweczki", "active", 14,20.0f));
+				new Subscription(1, 1, LocalDate.of(2022, 3, 19), "weekly", "Netflix subscription", "active", 14,20.0f,true),
+				new Subscription(2, 1, LocalDate.of(2022, 3, 19), "weekly", "Spotify subscription", "active", 14,20.0f,true),
+				new Subscription(3, 1, LocalDate.of(2022, 3, 19), "weekly", "Jakas tam paroweczki", "active", 14,20.0f,true));
 		String subscriptionListJSON=mapper.writeValueAsString(subscriptionList);
 		
 		when(subscriptionService.findByUserId(1)).thenReturn(subscriptionList);

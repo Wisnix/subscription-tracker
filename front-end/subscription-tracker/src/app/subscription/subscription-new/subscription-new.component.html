@@ -10,14 +10,14 @@
         </div>
 
         <div class="form-group">
-            <label for="startDate">Start Date</label>
+            <label for="startDate">Start
+                Date</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <button class="btn btn-outline-secondary" type="button" (click)="onSetToday()">Today</button>
                 </div>
                 <input type="date" class="form-control" id="startDate"
-                    [ngClass]="{'is-valid':startDate.valid,'is-invalid':startDate.invalid && startDate.touched}"
-                    formControlName="startDate">
+                    [ngClass]="{'is-valid':startDate.valid,'is-invalid':startDate.invalid && startDate.touched}" formControlName="startDate">
             </div>
             <div class="invalid-feedback" *ngIf="startDate.invalid && startDate.touched">
                 Please enter a start date.
@@ -30,30 +30,26 @@
                     <div class="input-group-text">£</div>
                 </div>
                 <input type="number" class="form-control" id="inlineFormInputGroup"
-                    [ngClass]="{'is-valid':price.valid,'is-invalid':price.invalid && price.touched}"
-                    formControlName="price">
+                    [ngClass]="{'is-valid':price.valid,'is-invalid':price.invalid && price.touched}" formControlName="price">
 
             </div>
         </div>
         <div class="form-group">
             <label for="startDate">Subscription type:</label>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="payInterval" id="typeAnnual" value="annual"
-                    formControlName="payInterval">
+                <input class="form-check-input" type="radio" name="payInterval" id="typeAnnual" value="year" formControlName="payInterval">
                 <label class="form-check-label" for="typeAnnual">
                     Annual
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="payInterval" id="typeMonthly" value="monthly"
-                    formControlName="payInterval">
+                <input class="form-check-input" type="radio" name="payInterval" id="typeMonthly" value="month" formControlName="payInterval">
                 <label class="form-check-label" for="typeMonthly">
                     Monthly
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="payInterval" id="typeWeekly" value="weekly"
-                    formControlName="payInterval">
+                <input class="form-check-input" type="radio" name="payInterval" id="typeWeekly" value="week" formControlName="payInterval">
                 <label class="form-check-label" for="typeWeekly">
                     Weekly
                 </label>
@@ -64,17 +60,25 @@
 
         </div>
         <div class=" form-group form-check">
-            <input type="checkbox" class="form-check-input" id="freePeriod" (change)="freePeriod=!freePeriod">
-            <label class="form-check-label" for="freePeriod">Free period</label>
+            <input type="checkbox" class="form-check-input" id="freePeriod" (change)="onToggleFreePeriod()" [checked]="freePeriod">
+            <label class="form-check-label" for="freePeriod">Free
+                period</label>
         </div>
         <div class="form-group" *ngIf="freePeriod">
             <label for="freePeriodDuration">Duration in days</label>
             <input type="number" class="form-control" id="freePeriodDuration" formControlName="freePeriod">
         </div>
         <div class="form-group form-check" *ngIf="freePeriod">
-            <input type="checkbox" class="form-check-input" id="reminder" formControlName="reminder" [checked]="false">
-            <label class="form-check-label" for="reminder">Receive reminder SMS and Email a day before free period
-                expires</label>
+            <input type="checkbox" class="form-check-input" id="reminder" formControlName="reminder" [checked]="reminder">
+            <label class="form-check-label" for="reminder">Receive reminder SMS and Email a day before free period expires</label>
+        </div>
+        <div class="form-group" *ngIf="editMode">
+            <label class="form-check-label" for="status">Status:</label>
+            <select class="form-input" id="status" formControlName="status">
+                <option value="active">active</option>
+                <option value="disabled">disabled</option>
+            </select>
+
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         <div class="text-danger mt-2" *ngIf="submitted && subscriptionForm.invalid">

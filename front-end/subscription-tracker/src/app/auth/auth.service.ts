@@ -8,50 +8,81 @@ export class AuthService {
   private expirationTimer: any;
   private isAuthenticated: boolean;
   private token: string;
+  private userId: string;
 
   constructor(private http: HttpClient, private router: Router) {}
 
   login(authData: AuthData) {
-    return this.http
-      .post<{ token: string; expiration: string }>(
+    this.http
+      .post<{ token: string; expiration: string; userId: string }>(
         'http://localhost:8081/users/authenticate',
         authData
       )
-      .subscribe((response) => {
-        const token = response.token;
-        const expirationTimestamp = Date.parse(response.expiration);
-        if (token) {
-          this.token = token;
-          this.isAuthenticated = true;
-          this.setAuthTimer(expirationTimestamp);
-          this.router.navigate(['/']);
-          this.saveAuthData(token, new Date(expirationTimestamp));
+      .subscribe(
+        (response) => {
+          const token = response.token;
+          const expirationTimestamp = Date.parse(response.expiration);
+          const userId = response.userId;
+          if (token) {
+            this.token = token;
+            this.userId = userId;
+            this.isAuthenticated = true;
+            this.setAuthTimer(expirationTimestamp);
+            this.router.navigate(['/']);
+            this.saveAuthData(token, new Date(expirationTimestamp), userId);
+          }
+        },
+        (err) => {
+          this.router.navigate(['/login'], {
+            queryParams: { loginFailure: true },
+          });
         }
-      });
+      );
   }
-  private saveAuthData(token: string, expiration: Date) {
+
+  signup(authData: AuthData) {
+    this.http.post('http://localhost:8081/users/signup', authData).subscribe(
+      (response) => {
+        if (response) {
+          this.router.navigate(['/login'], {
+            queryParams: { signupSuccess: true },
+          });
+        }
+      },
+      (err) => {
+        this.router.navigate(['/signup'], {
+          queryParams: { signupFailure: true },
+        });
+      }
+    );
+  }
+
+  private saveAuthData(token: string, expiration: Date, userId: string) {
     localStorage.setItem('token', token);
     localStorage.setItem('expiration', expiration.toISOString());
+    localStorage.setItem('userId', userId);
   }
 
   private clearAuthData() {
     localStorage.removeItem('token');
     localStorage.removeItem('expiration');
+    localStorage.removeItem('userId');
   }
 
   autoAuthUser() {
     const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
     const expiration = Date.parse(localStorage.getItem('expiration'));
     if (!token) return;
     if (expiration > Date.now()) {
       this.token = token;
       this.isAuthenticated = true;
       this.setAuthTimer(expiration);
+      this.userId = userId;
     }
   }
 
   private setAuthTimer(expirationTimestamp) {
-    console.log('setting timer to ' + (expirationTimestamp - Date.now()));
     this.expirationTimer = setTimeout(() => {
       this.logout();
     }, expirationTimestamp - Date.now());
@@ -71,5 +102,9 @@ export class AuthService {
 
   getToken() {
     return this.token;
+  }
+
+  getUserId() {
+    return this.userId;
   }
 }

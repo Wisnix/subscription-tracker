@@ -13,48 +13,33 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(authData: AuthData) {
-    this.http
-      .post<{ token: string; expiration: string; userId: string }>(
-        'http://localhost:8081/users/authenticate',
-        authData
-      )
-      .subscribe(
-        (response) => {
-          const token = response.token;
-          const expirationTimestamp = Date.parse(response.expiration);
-          const userId = response.userId;
-          if (token) {
-            this.token = token;
-            this.userId = userId;
-            this.isAuthenticated = true;
-            this.setAuthTimer(expirationTimestamp);
-            this.router.navigate(['/']);
-            this.saveAuthData(token, new Date(expirationTimestamp), userId);
-          }
-        },
-        (err) => {
-          this.router.navigate(['/login'], {
-            queryParams: { loginFailure: true },
-          });
-        }
-      );
+    return this.http.post<{
+      token: string;
+      expiration: string;
+      userId: string;
+    }>('http://localhost:8081/users/authenticate', authData);
+  }
+
+  processLoginResponse(response: {
+    token: string;
+    expiration: string;
+    userId: string;
+  }) {
+    const token = response.token;
+    const expirationTimestamp = Date.parse(response.expiration);
+    const userId = response.userId;
+    if (token) {
+      this.token = token;
+      this.userId = userId;
+      this.isAuthenticated = true;
+      this.setAuthTimer(expirationTimestamp);
+      this.router.navigate(['/']);
+      this.saveAuthData(token, new Date(expirationTimestamp), userId);
+    }
   }
 
   signup(authData: AuthData) {
-    this.http.post('http://localhost:8081/users/signup', authData).subscribe(
-      (response) => {
-        if (response) {
-          this.router.navigate(['/login'], {
-            queryParams: { signupSuccess: true },
-          });
-        }
-      },
-      (err) => {
-        this.router.navigate(['/signup'], {
-          queryParams: { signupFailure: true },
-        });
-      }
-    );
+    return this.http.post('http://localhost:8081/users/signup', authData);
   }
 
   private saveAuthData(token: string, expiration: Date, userId: string) {

@@ -8,6 +8,7 @@ import { SubscriptionNewComponent } from './subscription-new/subscription-new.co
 import { SubscriptionRoutingModule } from './subscription-routing.module';
 import { SubscriptionSelectComponent } from './subscription-select/subscription-select.component';
 import { SubscriptionComponent } from './subscription.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { SubscriptionComponent } from './subscription.component';
     FormsModule,
     ReactiveFormsModule,
     SubscriptionRoutingModule,
+    ModalModule.forRoot(),
   ],
   exports: [],
 })

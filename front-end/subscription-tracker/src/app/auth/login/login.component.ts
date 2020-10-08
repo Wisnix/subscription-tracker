@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -9,24 +10,33 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  signupSuccess: boolean = false;
-  loginFailure: boolean = false;
   isAuth: boolean;
   constructor(
     private authService: AuthService,
-    private route: ActivatedRoute
+    private flashMessage: FlashMessagesService
   ) {}
 
   ngOnInit(): void {
     this.isAuth = this.authService.isAuth();
-    this.signupSuccess = this.route.snapshot.queryParams.signupSuccess;
-    this.loginFailure = this.route.snapshot.queryParams.loginFailure;
   }
 
   onSubmit(form: NgForm) {
-    this.authService.login({
-      email: form.value.email,
-      password: form.value.password,
-    });
+    this.authService
+      .login({
+        email: form.value.email,
+        password: form.value.password,
+      })
+      .subscribe(
+        (response) => {
+          this.authService.processLoginResponse(response);
+        },
+        (err) => {
+          console.log(err);
+          this.flashMessage.show('Wrong username or password', {
+            cssClass: 'alert-danger',
+            timeout: 5000,
+          });
+        }
+      );
   }
 }

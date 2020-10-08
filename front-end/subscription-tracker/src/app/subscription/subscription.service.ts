@@ -30,4 +30,8 @@ export class SubscriptionService {
       subscription
     );
   }
+
+  deleteSubscription(id: string) {
+    return this.http.delete(`http://localhost:8081/subscriptions/${id}`);
+  }
 }

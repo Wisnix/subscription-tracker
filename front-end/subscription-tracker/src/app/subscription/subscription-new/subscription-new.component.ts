@@ -5,6 +5,7 @@ import { SubscriptionService } from '../subscription.service';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Subscription } from '../subscription.model';
+import { AlertService } from 'src/app/shared/alert/alert.service';
 
 @Component({
   selector: 'app-subscription-new',
@@ -18,10 +19,16 @@ export class SubscriptionNewComponent implements OnInit {
   editMode: boolean = false;
   subscriptionId: string;
 
+  options = {
+    autoClose: true,
+    keepAfterRouteChange: false,
+  };
+
   constructor(
     private subscriptionService: SubscriptionService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -76,12 +83,14 @@ export class SubscriptionNewComponent implements OnInit {
           .updateSubscription(this.subscriptionId, this.subscriptionForm.value)
           .subscribe((response) => {
             this.router.navigate(['/subscription']);
+            this.alertService.info('Subscription updated.', this.options);
           });
       } else {
         this.subscriptionService
           .createSubscription(this.subscriptionForm.value)
           .subscribe((response) => {
             this.router.navigate(['/subscription']);
+            this.alertService.success('Subscription created.', this.options);
           });
       }
     }

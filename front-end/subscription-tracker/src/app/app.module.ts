@@ -12,6 +12,8 @@ import { MainComponent } from './main/main.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
+import { FlashMessagesModule } from 'angular2-flash-messages';
+import { AlertModule } from './shared/alert/alert.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,14 @@ import { AuthInterceptor } from './auth/auth-interceptor';
     SideNavComponent,
     DashboardComponent,
   ],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    AlertModule,
+    FlashMessagesModule.forRoot(),
+  ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],

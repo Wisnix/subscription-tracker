@@ -20,7 +20,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'dashboard',
+        path: '',
         component: DashboardComponent,
       },
     ],

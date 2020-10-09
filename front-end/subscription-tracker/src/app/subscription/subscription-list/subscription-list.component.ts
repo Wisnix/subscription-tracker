@@ -25,7 +25,9 @@ export class SubscriptionListComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscriptionService.getSubscriptions().subscribe((subscriptions) => {
-      this.subscriptions = this.calculateNextPayment(subscriptions);
+      if (subscriptions.length > 0) {
+        this.subscriptions = this.calculateNextPayment(subscriptions);
+      }
     });
   }
 
@@ -33,22 +35,11 @@ export class SubscriptionListComponent implements OnInit {
     return subscriptions.map((subscription) => {
       let startDate = dayjs(subscription.startDate);
       let now = dayjs();
-      let type: dayjs.OpUnitType;
-      switch (subscription.payInterval) {
-        case 'week':
-          type = 'w';
-          break;
-        case 'month':
-          type = 'M';
-          break;
-        case 'year':
-          type = 'y';
-          break;
-      }
-      let nextPayment;
-      do {
-        nextPayment = dayjs(subscription.startDate).add(1, type);
-      } while (nextPayment.isBefore(now));
+      let type: dayjs.OpUnitType = this.subscriptionService.getOpUnitType(subscription.payInterval);
+      let nextPayment=dayjs(subscription.startDate).add(1, type);
+      while (nextPayment.isBefore(now)) {
+        nextPayment=nextPayment.add(1, type);
+      } 
       subscription.nextPayment = nextPayment.format('ddd DD MMM YYYY');
       return subscription;
     });

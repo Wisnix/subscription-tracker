@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from './subscription.model';
 
@@ -33,5 +34,21 @@ export class SubscriptionService {
 
   deleteSubscription(id: string) {
     return this.http.delete(`http://localhost:8081/subscriptions/${id}`);
+  }
+
+  getOpUnitType(payInterval: string): dayjs.OpUnitType {
+    let type: dayjs.OpUnitType;
+    switch (payInterval) {
+      case 'week':
+        type = 'w';
+        break;
+      case 'month':
+        type = 'M';
+        break;
+      case 'year':
+        type = 'y';
+        break;
+    }
+    return type;
   }
 }

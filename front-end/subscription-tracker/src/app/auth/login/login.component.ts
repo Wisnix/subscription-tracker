@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
           this.authService.processLoginResponse(response);
         },
         (err) => {
-          console.log(err);
           this.flashMessage.show('Wrong username or password', {
             cssClass: 'alert-danger',
             timeout: 5000,

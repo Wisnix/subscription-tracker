@@ -6,7 +6,8 @@
                     <h6 class="card-subtitle text-muted float-right mt-1">Started on: {{subscription.startDate}}</h6>
                     <h5 class="card-title">
                         {{subscription.name}}
-                        <span class="badge badge-success ml-2">{{subscription.status}}</span>
+                        <span class="badge ml-2"
+                            [ngClass]="{'badge-success':subscription.status=='active','badge-secondary':subscription.status=='disabled'}">{{subscription.status}}</span>
                         <span
                             class="badge badge-info ml-2">{{(subscription.startDate | dayDiff:subscription.freePeriod)>0?(subscription.startDate | dayDiff:subscription.freePeriod)+" free days left":""}}</span>
                     </h5>

@@ -4,34 +4,61 @@
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Next Payment:</h5>
-                    <p class="card-text">Netflix £40 on 12-12-2000</p>
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <h5 class="card-title">Next Payment:</h5>
+                        </div>
+                        <div class="col-lg-7">
+                            <p class="card-text" *ngFor="let subscription of nextPayments">
+                                {{subscription.name+" £"+subscription.price+" on "+subscription.nextPayment}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Current monthly expenditure:</h5>
-                    <p class="card-text">£99</p>
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <h5 class="card-title">Free Period Active:</h5>
+                        </div>
+                        <div class="col-lg-7">
+                            <p class="card-text" *ngFor="let subscription of subscriptionsOnFreePeriod">
+                                {{subscription.name+" until "+subscription.nextPayment}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
     <div class="row mt-2">
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Active Subscriptions</h5>
-                    <p class="card-text">1</p>
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <h5 class="card-title">Active Subscriptions:</h5>
+                        </div>
+                        <div class="col-lg-2">
+                            <p class="card-text">{{activeSubscriptions}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Free Period:</h5>
-                    <p class="card-text">£99</p>
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <h5 class="card-title">Current monthly expenditure:</h5>
+                        </div>
+                        <div class="col-lg-3">
+                            <p class="card-text">£{{currentMonthlyExpenditure}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

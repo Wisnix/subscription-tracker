@@ -7,70 +7,63 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AlertService } from 'src/app/shared/alert/alert.service';
 
 @Component({
-  selector: 'app-subscription-list',
-  templateUrl: './subscription-list.component.html',
-  styleUrls: ['./subscription-list.component.css'],
+	selector: 'app-subscription-list',
+	templateUrl: './subscription-list.component.html',
+	styleUrls: ['./subscription-list.component.css'],
 })
 export class SubscriptionListComponent implements OnInit {
-  modalRef: BsModalRef;
-  subscriptions: Subscription[] = [];
-  subscriptionToDelete: string;
-  constructor(
-    private subscriptionService: SubscriptionService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private modalService: BsModalService,
-    private alertService: AlertService
-  ) {}
+	modalRef: BsModalRef;
+	subscriptions: Subscription[] = [];
+	subscriptionToDelete: string;
+	constructor(
+		private subscriptionService: SubscriptionService,
+		private route: ActivatedRoute,
+		private router: Router,
+		private modalService: BsModalService,
+		private alertService: AlertService
+	) {}
 
-  ngOnInit(): void {
-    this.subscriptionService.getSubscriptions().subscribe((subscriptions) => {
-      if (subscriptions.length > 0) {
-        this.subscriptions = this.calculateNextPayment(subscriptions);
-      }
-    });
-  }
+	ngOnInit(): void {
+		this.subscriptionService.getSubscriptions().subscribe((subscriptions) => {
+			this.subscriptions = subscriptions;
+		});
 
-  private calculateNextPayment(subscriptions: Subscription[]): Subscription[] {
-    return subscriptions.map((subscription) => {
-      let startDate = dayjs(subscription.startDate);
-      let now = dayjs();
-      let type: dayjs.OpUnitType = this.subscriptionService.getOpUnitType(subscription.payInterval);
-      let nextPayment=dayjs(subscription.startDate).add(1, type);
-      while (nextPayment.isBefore(now)) {
-        nextPayment=nextPayment.add(1, type);
-      } 
-      subscription.nextPayment = nextPayment.format('ddd DD MMM YYYY');
-      return subscription;
-    });
-  }
+		this.subscriptionService.subscriptionsChanged.subscribe((subscriptions) => {
+			this.subscriptions = subscriptions;
+		});
+	}
 
-  onEditSubscription(id: string) {
-    this.router.navigate([id, 'edit'], { relativeTo: this.route });
-  }
+	private calculateNextPayment(subscriptions: Subscription[]): Subscription[] {
+		return subscriptions.map((subscription) => {
+			let startDate = dayjs(subscription.startDate);
+			let now = dayjs();
+			let type: dayjs.OpUnitType = this.subscriptionService.getOpUnitType(subscription.payInterval);
+			let nextPayment = dayjs(subscription.startDate).add(1, type);
+			while (nextPayment.isBefore(now)) {
+				nextPayment = nextPayment.add(1, type);
+			}
+			subscription.nextPayment = nextPayment.format('ddd DD MMM YYYY');
+			return subscription;
+		});
+	}
 
-  onDeleteSubscription(template: TemplateRef<any>, id: string) {
-    this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
-    this.subscriptionToDelete = id;
-  }
+	onEditSubscription(id: string) {
+		this.router.navigate([id, 'edit'], { relativeTo: this.route });
+	}
 
-  confirm(): void {
-    this.modalRef.hide();
-    this.subscriptionService
-      .deleteSubscription(this.subscriptionToDelete)
-      .subscribe(() => {
-        this.subscriptions.splice(
-          this.subscriptions.findIndex(
-            (s) => s.id === this.subscriptionToDelete
-          )
-        );
-        this.alertService.warn('Subscription deleted.', { autoClose: true });
-      });
-    this.subscriptionToDelete = null;
-  }
+	onDeleteSubscription(template: TemplateRef<any>, id: string) {
+		this.modalRef = this.modalService.show(template, { class: 'modal-sm' });
+		this.subscriptionToDelete = id;
+	}
 
-  decline(): void {
-    this.modalRef.hide();
-    this.subscriptionToDelete = null;
-  }
+	confirm(): void {
+		this.modalRef.hide();
+		this.subscriptionService.deleteSubscription(this.subscriptionToDelete);
+		this.subscriptionToDelete = null;
+	}
+
+	decline(): void {
+		this.modalRef.hide();
+		this.subscriptionToDelete = null;
+	}
 }

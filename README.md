@@ -1,4 +1,4 @@
-# subscription-tracker
+# Subscription tracker
 
 Subscription tracking app built with Angular and Spring Boot.
 

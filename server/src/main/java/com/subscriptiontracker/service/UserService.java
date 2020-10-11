@@ -1,6 +1,11 @@
 package com.subscriptiontracker.service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.subscriptiontracker.entity.Subscription;
 import com.subscriptiontracker.entity.User;
 import com.subscriptiontracker.repository.UserRepository;
 
@@ -36,6 +42,21 @@ public class UserService implements UserDetailsService {
 	
 	public void createUser(User user) {
 		userRepository.save(user);
+	}
+	
+	public Set<User> findAllUsersWithActiveRemainder(){
+		Set<User> users=userRepository.findAllUsersWithActiveRemainder();
+		LocalDate today = LocalDate.now();
+		
+		Predicate<Subscription> isPaymentTomorrow = (subscription -> {
+			LocalDate endOfFreePeriod = subscription.getStartDate().plusDays(subscription.getFreePeriod());
+			return Period.between(today, endOfFreePeriod).getDays() != 1;
+		});
+		
+		return users.stream().map(user -> {
+			user.getSubscriptions().removeIf(isPaymentTomorrow);
+			return user;
+		}).filter(user -> user.getSubscriptions().size() != 0).collect(Collectors.toSet());		
 	}
 
 }

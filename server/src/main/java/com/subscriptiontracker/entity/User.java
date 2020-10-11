@@ -57,5 +57,10 @@ public class User{
 	public void setSubscriptions(List<Subscription> subscriptions) {
 		this.subscriptions = subscriptions;
 	}
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", password=" + password + ", subscriptions=" + subscriptions
+				+ "]";
+	}
 		
 }

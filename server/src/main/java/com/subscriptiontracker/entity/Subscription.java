@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Formula;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -116,6 +116,7 @@ public class Subscription {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((payInterval == null) ? 0 : payInterval.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
+		result = prime * result + ((reminder == null) ? 0 : reminder.hashCode());
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
@@ -155,6 +156,11 @@ public class Subscription {
 				return false;
 		} else if (!price.equals(other.price))
 			return false;
+		if (reminder == null) {
+			if (other.reminder != null)
+				return false;
+		} else if (!reminder.equals(other.reminder))
+			return false;
 		if (startDate == null) {
 			if (other.startDate != null)
 				return false;
@@ -176,9 +182,7 @@ public class Subscription {
 	public String toString() {
 		return "Subscription [id=" + id + ", userId=" + userId + ", startDate=" + startDate + ", payInterval="
 				+ payInterval + ", name=" + name + ", status=" + status + ", freePeriod=" + freePeriod + ", price="
-				+ price + "]";
+				+ price + ", reminder=" + reminder + "]";
 	}
-	
-	
 	
 }

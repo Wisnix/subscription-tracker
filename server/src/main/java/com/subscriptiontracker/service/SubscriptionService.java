@@ -12,6 +12,8 @@ public interface SubscriptionService {
 	
 	Subscription save(Subscription subscription);
 	
+	void updateReminders(List<Subscription> subscriptions);
+	
 	void deleteSubscription(int id);
 	
 }

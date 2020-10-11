@@ -1,6 +1,7 @@
 package com.subscriptiontracker.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,14 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	public void deleteSubscription(int id) {
 		repository.deleteById(id);
 	}
-	
-	
 
+	@Override
+	public void updateReminders(List<Subscription> subscriptions) {
+		List<Subscription> updatedSubscriptions=subscriptions.stream().map(subscription->{
+			subscription.setReminder(false);
+			return subscription;
+		}).collect(Collectors.toList());
+		repository.saveAll(updatedSubscriptions);
+	}
+	
 }
